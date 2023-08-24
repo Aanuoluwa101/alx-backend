@@ -40,16 +40,14 @@ class Server:
         return self.__dataset
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
-        """return the appropriate page of the dataset"""
+        """get specific pages"""
         assert type(page) is int and page > 0
         assert type(page_size) is int and page_size > 0
 
-        # get the data from the csv
-        data = self.dataset()
+        dataset = self.dataset()
 
         try:
-            # get the index to start and end at
-            start, end = index_range(page, page_size)
-            return data[start:end]
+            start_index, end_index = index_range(page, page_size)
+            return dataset[start_index:end_index]
         except IndexError:
             return []
