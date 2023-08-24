@@ -41,11 +41,11 @@ class Server:
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
         assert type(page) is int and page > 0 \
-            and type(page_size) is int  and page_size > 0
+            and type(page_size) is int and page_size > 0
         start_index, end_index = index_range(page, page_size)
         dataset = self.dataset()
 
         try:
-            return dataset[start_index: end_index]
+            return dataset[start_index:end_index]
         except IndexError:
             return []
