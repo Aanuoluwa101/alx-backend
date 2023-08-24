@@ -1,71 +1,39 @@
 #!/usr/bin/env python3
-"""Defines a class LRUCache that inherits from BaseCaching and is a caching system
+"""Defines a class MRUCache
 """
 
 
 BaseCaching = __import__('base_caching').BaseCaching
 
 
-class LRUCache(BaseCaching):
-    """A Least Recently Used (LRU) caching system
+class MRUCache(BaseCaching):
+    """A Most Recently Used (MRU) caching system
     """
     def __init__(self):
         """Initalize cache
         """
         super().__init__()
-        self.age_bits = {}
-        self.oldest = 0
+        self.recency = []
 
     def put(self, key, item):
-        print("age_bits: ", self.age_bits)
+        """Add item to cache
+        """
+        self.cache_data[key] = item
         if all([key, item]):
-            if len(self.cache_data) >= self.MAX_ITEMS and key not in self.cache_data:
-                lru_age = min(list(self.age_bits.keys()))
-                discarded_key = self.age_bits.pop(lru_age)
+            if key not in self.recency:
+                self.recency.append(key)
+            else:
+                self.recency.append(self.recency.pop(self.recency.index(key)))
 
-                self.cache_data.pop(discarded_key)
-                print('DISCARD: {}'.format(discarded_key))
-            self.cache_data[key] = item
-            self.age_bits = {key: value for key, value in self.age_bits.items() if value != key}
-            self.age_bits[self.oldest] = key
-            self.oldest += 1
+            if len(self.recency) > self.MAX_ITEMS:
+                discard_key = self.recency.pop(-2)
+                self.cache_data.pop(discard_key)
+                print('DISCARD: {}'.format(discard_key))
 
     def get(self, key):
+        """Retrieve a cache item
+        """
         if key and key in self.cache_data:
-            return self.cache_data[key]
+            self.recency.append(self.recency.pop(self.recency.index(key)))
+            return self.cache_data.get(key)
         return None
-
-my_cache = LRUCache()
-my_cache.put("A", "Hello")
-my_cache.put("B", "World")
-my_cache.put("C", "Holberton")
-my_cache.put("D", "School")
-
-
-print(my_cache.age_bits)
-# my_cache.print_cache()
-# print(my_cache.get("B"))
-my_cache.put("E", "Battery")
-print(my_cache.age_bits)
-
-
-# my_cache.print_cache()
-my_cache.put("C", "Street")
-print(my_cache.age_bits)
-
-# my_cache.print_cache()
-# print(my_cache.get("A"))
-# print(my_cache.get("B"))
-# print(my_cache.get("C"))
-# my_cache.put("F", "Mission")
-# my_cache.print_cache()
-# my_cache.put("G", "San Francisco")
-# my_cache.print_cache()
-# my_cache.put("H", "H")
-# my_cache.print_cache()
-# my_cache.put("I", "I")
-# my_cache.print_cache()
-# my_cache.put("J", "J")
-# my_cache.print_cache()
-# my_cache.put("K", "K")
-# my_cache.print_cache()
