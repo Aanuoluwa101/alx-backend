@@ -7,10 +7,10 @@
 
 import csv
 import math
-from typing import List
+from typing import List, Tuple, Union, Dict
 
 
-def index_range(page: int, page_size: int) -> tuple[int, int]:
+def index_range(page: int, page_size: int) -> Tuple[int, int]:
     """
     Returns a tuple of size two
     containing a start index and an end index
@@ -41,18 +41,19 @@ class Server:
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
         """Returns a page of the dataset"""
-        assert isinstance(page, int) and page > 0 \
-            and isinstance(page_size, int) and page_size > 0
-        start_index, end_index = index_range(page, page_size)
+        assert type(page) is int and page > 0
+        assert type(page_size) is int and page_size > 0
         dataset = self.dataset()
 
-        if start_index > len(dataset) - 1:
+        try:
+            # get the index to start and end at
+            start, end = index_range(page, page_size)
+            return dataset[start:end]
+        except IndexError:
             return []
-        return [dataset[idx] for idx in range(start_index, end_index)
-                if idx < len(dataset)]
 
-    def get_hyper(self, page: int = 1, page_size: int = 10) \
-            -> dict[str, int | List[List]]:
+    def get_hyper(self, page: int = 1, page_size: int = 10) -> \
+            Dict[str, Union[int, List[List]]]:
         """Returns a dictionary"""
         dataset = self.dataset()
         next_page = page + 1 if index_range(page, page_size)[1] \
