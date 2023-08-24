@@ -17,6 +17,8 @@ class LRUCache(BaseCaching):
         self.most_recently_used = 0
 
     def put(self, key, item):
+        """Add item to cache
+        """
         if all([key, item]):
             if len(self.cache_data) >= self.MAX_ITEMS and \
                     key not in self.cache_data:
@@ -30,6 +32,8 @@ class LRUCache(BaseCaching):
             print(self.age_bits)
 
     def get_lru(self):
+        """Returns least recently used item in cache
+        """
         lru_index = min(self.age_bits.values())
         for key, value in self.age_bits.items():
             if value == lru_index:
@@ -37,6 +41,8 @@ class LRUCache(BaseCaching):
         return None
 
     def get(self, key):
+        """Retrieve item from cache
+        """
         if key and key in self.cache_data:
             return self.cache_data[key]
         return None

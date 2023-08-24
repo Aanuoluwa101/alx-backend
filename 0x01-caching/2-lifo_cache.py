@@ -17,6 +17,8 @@ class LIFOCache(BaseCaching):
         self.latest = 0
 
     def put(self, key, item):
+        """Add item to cache
+        """
         if all([key, item]):
             if len(self.cache_data) >= self.MAX_ITEMS and \
                     key not in self.cache_data:
@@ -29,12 +31,16 @@ class LIFOCache(BaseCaching):
             self.latest += 1
 
     def get_last_in(self):
+        """Returns the last item put into cache
+        """
         for key, value in self.insertion_order.items():
             if value == self.latest - 1:
                 return key
         return None
 
     def get(self, key):
+        """Retrieve item from cache
+        """
         if key and key in self.cache_data:
             return self.cache_data[key]
         return None

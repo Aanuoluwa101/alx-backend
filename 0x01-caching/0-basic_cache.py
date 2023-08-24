@@ -15,10 +15,14 @@ class BasicCache(BaseCaching):
         super().__init__()
 
     def put(self, key, item):
+        """Add item to cache
+        """
         if all([key, item]):
             self.cache_data[key] = item
 
     def get(self, key):
+        """Retrieve item from cache
+        """
         if key and key in self.cache_data:
             return self.cache_data[key]
         return None

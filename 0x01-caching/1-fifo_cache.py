@@ -17,6 +17,7 @@ class FIFOCache(BaseCaching):
         self.latest = 0
 
     def put(self, key, item):
+        """Add item to cache"""
         if all([key, item]):
             if len(self.cache_data) >= self.MAX_ITEMS and \
                     key not in self.cache_data:
@@ -29,6 +30,8 @@ class FIFOCache(BaseCaching):
             self.latest += 1
 
     def get_first_in(self):
+        """Returns the item first put into cache
+        """
         oldest = min(self.insertion_order.values())
         for key, value in self.insertion_order.items():
             if value == oldest:
@@ -36,6 +39,8 @@ class FIFOCache(BaseCaching):
         return None
 
     def get(self, key):
+        """Retrieve item from cache
+        """
         if key and key in self.cache_data:
             return self.cache_data[key]
         return None
